@@ -142,3 +142,20 @@ multiple lines.
 +---------------+---------------+--------------------+
 | Oranges       | $2.10         | cures scurvy       |
 +---------------+---------------+--------------------+
+
+# New xml2rfc
+
+IETF has created a new version of the xml2rfc tool.
+
+## Installation instructions
+Download xml2rfc from [pypi](http://pypi.python.org/pypi/xml2rfc)
+
+Version 2.3.3 is broken and must be patched
+
+    cd /path/to/extracted/xml2rfc-2.3.3
+    wget http://db.tt/hbUsBKcj -O base-writer.patch
+    patch -p0 < base-writer.patch
+
+Make sure you have **python-setuptools** installed
+
+Follow the INSTALL document found in the xml2rfc root directory

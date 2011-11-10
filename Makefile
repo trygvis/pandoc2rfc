@@ -1,16 +1,19 @@
-all:	draft.txt
+SHELL = /bin/sh
 
-%.xml:	%.mkd transform.xsl
-	pandoc $< -t docbook -s | xsltproc transform.xsl - > $@
+all:	txt html
 
-draft.txt:	middle.xml back.xml template.xml
-	DISPLAY= xml2rfc template.xml draft.txt
+target:	
+	@ if [ ! -d target ]; then mkdir target; fi	
 
-draft.html: 	middle.xml back.xml template.xml
-	DISPLAY= xml2rfc template.xml draft.html
+%.xml:	%.mkd transform.xsl target
+	pandoc $< -t docbook -s | xsltproc transform.xsl - > target/$@
+
+txt:	middle.xml back.xml template.xml
+	cp template.xml target/ && cd target && xml2rfc template.xml --text --no-dtd -b draft
+
+html: 	middle.xml back.xml template.xml
+	cp template.xml target/ && cd target && xml2rfc template.xml --html --no-dtd -b draft
 
 clean:
-	rm -f middle.xml back.xml
+	rm -rf target 
 
-realclean:	clean
-	rm -f draft.txt draft.html
