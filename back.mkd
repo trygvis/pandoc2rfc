@@ -157,7 +157,7 @@ Version 2.3.3 is broken and must be patched
     wget http://db.tt/hbUsBKcj -O base-writer.patch
     (cd xml2rfc-2.3.3 && patch -p0 < ../base-writer.patch)
     (cd xml2rfc-2.3.3 && python setup.py install --user)
-	rm -rf xml2rfc-2.3.3
+    rm -rf xml2rfc-2.3.3
 
 Make sure you have **python-setuptools** installed
 
