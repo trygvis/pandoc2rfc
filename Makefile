@@ -1,18 +1,31 @@
 SHELL = /bin/sh
 
-all:	txt html
+PATH := $(HOME)/.local/bin:$(PATH)
 
-target:	
-	@ if [ ! -d target ]; then mkdir target; fi	
+.PHONY: txt html clean
 
-%.xml:	%.mkd transform.xsl target
-	pandoc $< -t docbook -s | xsltproc transform.xsl - > target/$@
+all: txt html
 
-txt:	middle.xml back.xml template.xml
-	cp template.xml target/ && cd target && xml2rfc template.xml --text --no-dtd -b draft
+txt: target/draft.txt
 
-html: 	middle.xml back.xml template.xml
-	cp template.xml target/ && cd target && xml2rfc template.xml --html --no-dtd -b draft
+html: target/draft.html
+
+target/template.xml: template.xml
+	@mkdir -p target
+	cp template.xml $@
+
+target/%.dbx: %.mkd transform.xsl
+	@mkdir -p target
+	pandoc $< -t docbook -s > $@
+
+target/%.xml: target/%.dbx
+	xsltproc transform.xsl $< > $@
+
+%.txt: target/middle.xml target/back.xml target/template.xml
+	cd target && xml2rfc template.xml --text --no-dtd -b draft
+
+%.html: target/middle.xml target/back.xml target/template.xml
+	cd target && xml2rfc template.xml --html --no-dtd -b draft
 
 clean:
 	rm -rf target 
